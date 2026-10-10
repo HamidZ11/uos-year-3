@@ -1,0 +1,34 @@
+about:
+    path: /about
+    controller: App\Controller\DefaultController::about
+
+# yaml-language-server: $schema=../vendor/symfony/routing/Loader/schema/routing.schema.json
+
+# This file is the entry point to configure the routes of your app.
+# Methods with the #[Route] attribute are automatically imported.
+# See also https://symfony.com/doc/current/routing.html
+
+# To list all registered routes, run the following command:
+#   bin/console debug:router
+
+
+controllers:
+    resource: routing.controllers
+
+greeting:
+    path: /{salutation}/{name}
+    controller: App\Controller\DefaultController::greetingAction
+    requirements: 
+        salutation: 'hello|hi|welcome'
+
+hello_name:
+    path: /hello/{name}
+    controller: App\Controller\DefaultController::helloNameAction
+
+increment:
+    path: /increment/{digit}
+    controller: App\Controller\DefaultController::incrementAction
+    requirements:
+        digit: '\d'
+
+    

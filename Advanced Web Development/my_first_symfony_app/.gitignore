@@ -1,0 +1,35 @@
+
+###> symfony/framework-bundle ###
+/.env.local
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+# Environment files (contain APP_SECRET) - not archived
+/.env
+/.env.*
+
+# Front-end dependencies / compiled assets
+/node_modules/
+/public/assets/
+/assets/vendor/
+
+# PHPUnit
+/.phpunit.cache/
+/.phpunit.result.cache
+
+# Build artefacts
+/build/
+/coverage/
+
+# macOS
+.DS_Store
+._*
+
+# Editors / IDEs
+.vscode/
+.idea/
