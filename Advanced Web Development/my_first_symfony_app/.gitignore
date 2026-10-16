@@ -12,6 +12,7 @@
 # Environment files (contain APP_SECRET) - not archived
 /.env
 /.env.*
+!/.env.example
 
 # Front-end dependencies / compiled assets
 /node_modules/

@@ -15,15 +15,16 @@ about:
 controllers:
     resource: routing.controllers
 
-greeting:
-    path: /{salutation}/{name}
-    controller: App\Controller\DefaultController::greetingAction
-    requirements: 
-        salutation: 'hello|hi|welcome'
-
+# Keep this specific pattern before the general salutation pattern below.
 hello_name:
     path: /hello/{name}
     controller: App\Controller\DefaultController::helloNameAction
+
+greeting:
+    path: /{salutation}/{name}
+    controller: App\Controller\DefaultController::greetingAction
+    requirements:
+        salutation: 'hello|hi|welcome'
 
 increment:
     path: /increment/{digit}

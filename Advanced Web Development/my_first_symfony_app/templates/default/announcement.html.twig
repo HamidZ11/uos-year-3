@@ -1,0 +1,15 @@
+{% extends 'default/layout.html.twig' %}
+
+{% block title %}Announcement {{ announcement.id }}{% endblock %}
+
+{% block content %}
+    <h1>Announcement {{ announcement.id }}</h1>
+    <p>{{ announcement.message }}</p>
+    <dl>
+        <dt>Created</dt>
+        <dd>
+            <time datetime="{{ announcement.timestamp|date('c') }}">{{ announcement.timestamp|date('Y-m-d H:i:s') }}</time>
+        </dd>
+    </dl>
+    <p><a href="{{ path('announcements') }}">All announcements</a></p>
+{% endblock %}

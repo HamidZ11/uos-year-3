@@ -4,6 +4,10 @@ namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
+use App\Entity\Announcement;
+use App\Repository\AnnouncementRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\HttpFoundation\Response;
 
 class DefaultController extends AbstractController
 {
@@ -37,8 +41,61 @@ class DefaultController extends AbstractController
         return $this->render('default/greeting.html.twig', ['salutation' => $salutation, 'name' => $name]);
     }
 
-    #[Route('/contacts')]
+    // GET follows the workshop example; a production creation endpoint should use POST.
+    #[Route('/new_announcement/{message}', name: 'new_announcement', methods: ['GET'])]
+    public function newAnnouncementAction(
+        string $message,
+        EntityManagerInterface $entityManager
+    ): Response {
+        $message = trim($message);
 
+        if ($message === '') {
+            return new Response('Message must not be blank.', Response::HTTP_BAD_REQUEST, [
+                'Content-Type' => 'text/plain; charset=UTF-8',
+            ]);
+        }
+
+        $announcement = new Announcement();
+        $announcement->setMessage($message);
+        $announcement->setTimestamp(new \DateTimeImmutable());
+
+        $entityManager->persist($announcement);
+        $entityManager->flush();
+
+        return new Response('Saved announcement ID: '.$announcement->getId(), Response::HTTP_CREATED, [
+            'Content-Type' => 'text/plain; charset=UTF-8',
+        ]);
+    }
+
+    #[Route('/announcements', name: 'announcements', methods: ['GET'])]
+    public function announcementsAction(AnnouncementRepository $repository): Response
+    {
+        return $this->render('default/announcements.html.twig', [
+            'announcements' => $repository->findBy([], ['timestamp' => 'DESC', 'id' => 'DESC']),
+        ]);
+    }
+
+    #[Route('/announcement/{id}', name: 'announcement_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function announcementAction(string $id, AnnouncementRepository $repository): Response
+    {
+        $announcementId = filter_var($id, FILTER_VALIDATE_INT, ['options' => ['min_range' => 1]]);
+
+        if ($announcementId === false) {
+            throw $this->createNotFoundException('Announcement not found.');
+        }
+
+        $announcement = $repository->find($announcementId);
+
+        if ($announcement === null) {
+            throw $this->createNotFoundException('Announcement not found.');
+        }
+
+        return $this->render('default/announcement.html.twig', [
+            'announcement' => $announcement,
+        ]);
+    }
+
+    #[Route('/contacts')]
     public function contactsAction()
     {
         $contacts = [

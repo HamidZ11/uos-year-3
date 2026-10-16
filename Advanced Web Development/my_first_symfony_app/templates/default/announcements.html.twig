@@ -1,0 +1,34 @@
+{% extends 'default/layout.html.twig' %}
+
+{% block title %}Announcements{% endblock %}
+
+{% block content %}
+    <h1>Announcements</h1>
+    <table>
+        <caption>Saved announcements, newest first</caption>
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Message</th>
+                <th scope="col">Created</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for announcement in announcements %}
+                <tr>
+                    <td>
+                        <a href="{{ path('announcement_show', {id: announcement.id}) }}" aria-label="View announcement {{ announcement.id }}">{{ announcement.id }}</a>
+                    </td>
+                    <td>{{ announcement.message }}</td>
+                    <td>
+                        <time datetime="{{ announcement.timestamp|date('c') }}">{{ announcement.timestamp|date('Y-m-d H:i:s') }}</time>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">No announcements yet.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
